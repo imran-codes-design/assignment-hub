@@ -1,0 +1,11 @@
+# Direct application dependencies.
+Django==6.1.1
+
+# Production WSGI server for Linux deployments.
+gunicorn==23.0.0
+
+# Pinned transitive dependencies of Django and Gunicorn for reproducible installs.
+asgiref==3.12.1
+packaging==25.0
+sqlparse==0.6.0
+tzdata==2026.2

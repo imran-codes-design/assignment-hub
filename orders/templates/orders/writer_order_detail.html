@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Order #{{ order.pk }} | Assignment Helping Agency</title>
+    <link rel="stylesheet" href="{% static 'orders/css/writer-order-detail.css' %}">
+</head>
+
+<body class="writer-order-detail-page">
+    <a class="detail-skip-link" href="#order-content">Skip to order details</a>
+
+    <header class="detail-header">
+        <div class="detail-container detail-header-inner">
+            <a class="detail-brand" href="{% url 'home' %}">
+                <span class="detail-brand-icon" aria-hidden="true">A</span>
+                <span>Assignment <span class="detail-brand-light">Helping Agency</span></span>
+            </a>
+
+            <div class="detail-header-actions">
+                <a class="detail-back-link" href="{% url 'writer_orders' %}">
+                    <span aria-hidden="true">←</span> Back to My Orders
+                </a>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button class="detail-logout" type="submit">Log out</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <main class="detail-main" id="order-content">
+        <div class="detail-container">
+            <section class="detail-page-heading" aria-labelledby="order-title">
+                <p class="detail-eyebrow">Writer workspace <span aria-hidden="true"></span> Order #{{ order.pk }}</p>
+                <div class="detail-title-row">
+                    <div class="detail-title-copy">
+                        <h1 id="order-title">{{ order.title }}</h1>
+                        <p>Order details and work area</p>
+                    </div>
+                    <span class="detail-status status-{{ order.status }}">
+                        <span class="detail-status-dot" aria-hidden="true"></span>
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+            </section>
+
+            <div class="detail-layout">
+                <div class="detail-main-column">
+                    <section class="detail-card description-card" aria-labelledby="description-heading">
+                        <div class="detail-card-heading">
+                            <span class="detail-section-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M6 3.75h8l4 4v12.5H6z"/><path d="M14 3.75v4h4M9 12h6M9 15.5h6"/></svg>
+                            </span>
+                            <div>
+                                <p class="detail-card-kicker">Project brief</p>
+                                <h2 id="description-heading">Order description</h2>
+                            </div>
+                        </div>
+                        <div class="detail-description">{{ order.description|linebreaks }}</div>
+                    </section>
+
+                    {% if order.status == "assigned" %}
+                        <section class="detail-card detail-action-card" aria-labelledby="start-work-heading">
+                            <div class="detail-card-heading">
+                                <span class="detail-section-icon detail-action-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24"><path d="M8 5.5v13l10-6.5z"/></svg>
+                                </span>
+                                <div>
+                                    <p class="detail-card-kicker">Ready when you are</p>
+                                    <h2 id="start-work-heading">Start this order</h2>
+                                </div>
+                            </div>
+                            <p class="detail-action-copy">Start work on this assigned order to begin your work session.</p>
+                            <form method="post">
+                                {% csrf_token %}
+                                <button class="detail-button detail-button-primary" type="submit" name="action" value="start">
+                                    Start Work <span aria-hidden="true">→</span>
+                                </button>
+                            </form>
+                        </section>
+                    {% elif order.status == "in_progress" or order.status == "revision" %}
+                        <section class="detail-card detail-submission-card" aria-labelledby="submission-heading">
+                            <div class="detail-card-heading">
+                                <span class="detail-section-icon detail-action-icon" aria-hidden="true">
+                                    <svg viewBox="0 0 24 24"><path d="M12 15V4m0 0L8 8m4-4 4 4M5 14v5.25h14V14"/></svg>
+                                </span>
+                                <div>
+                                    <p class="detail-card-kicker">Work submission</p>
+                                    <h2 id="submission-heading">
+                                        {% if order.status == "revision" %}
+                                            Resubmit Revised Assignment
+                                        {% else %}
+                                            Submit Completed Assignment
+                                        {% endif %}
+                                    </h2>
+                                </div>
+                            </div>
+
+                            <form class="detail-submission-form" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% if form.non_field_errors %}
+                                    <div class="detail-form-errors" role="alert">{{ form.non_field_errors }}</div>
+                                {% endif %}
+                                <div class="detail-field">
+                                    <label for="id_file">Completed File</label>
+                                    <input class="detail-file-input" type="file" name="file" id="id_file" required>
+                                    {% if form.file.errors %}
+                                        <div class="detail-field-errors" role="alert">{{ form.file.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <div class="detail-field">
+                                    <label for="id_note">Note</label>
+                                    <textarea
+                                        class="detail-textarea"
+                                        name="note"
+                                        id="id_note"
+                                        rows="5"
+                                        placeholder="Add a note for the admin..."
+                                    >{{ form.note.value|default_if_none:"" }}</textarea>
+                                    {% if form.note.errors %}
+                                        <div class="detail-field-errors" role="alert">{{ form.note.errors }}</div>
+                                    {% endif %}
+                                </div>
+                                <button class="detail-button detail-button-primary" type="submit" name="action" value="submit">
+                                    Submit to Admin <span aria-hidden="true">→</span>
+                                </button>
+                            </form>
+                        </section>
+                    {% elif order.status == "submitted" %}
+                        <section class="detail-card detail-status-message" aria-labelledby="submission-status-heading">
+                            <span class="detail-message-icon" aria-hidden="true">i</span>
+                            <div>
+                                <h2 id="submission-status-heading">Submission awaiting review</h2>
+                                <p>Your submission is awaiting review.</p>
+                            </div>
+                        </section>
+                    {% elif order.status == "completed" %}
+                        <section class="detail-card detail-status-message" aria-labelledby="submission-status-heading">
+                            <span class="detail-message-icon" aria-hidden="true">✓</span>
+                            <div>
+                                <h2 id="submission-status-heading">Order complete</h2>
+                                <p>This order is complete.</p>
+                            </div>
+                        </section>
+                    {% elif order.status == "cancelled" %}
+                        <section class="detail-card detail-status-message" aria-labelledby="submission-status-heading">
+                            <span class="detail-message-icon" aria-hidden="true">!</span>
+                            <div>
+                                <h2 id="submission-status-heading">Order cancelled</h2>
+                                <p>This order has been cancelled.</p>
+                            </div>
+                        </section>
+                    {% endif %}
+                </div>
+
+                <aside class="detail-sidebar" aria-label="Order information">
+                    <section class="detail-card deadline-card" aria-labelledby="deadline-heading">
+                        <p class="detail-card-kicker">Important date</p>
+                        <h2 id="deadline-heading">Deadline</h2>
+                        <p class="detail-deadline-date">{{ order.deadline|date:"M j, Y" }}</p>
+                        <p class="detail-deadline-time">{{ order.deadline|date:"H:i" }}</p>
+                    </section>
+
+                    <section class="detail-card information-card" aria-labelledby="information-heading">
+                        <div class="detail-card-heading detail-sidebar-heading">
+                            <span class="detail-section-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24"><path d="M5 5.5h14v13H5z"/><path d="M8 9h8M8 12.5h8M8 16h4"/></svg>
+                            </span>
+                            <h2 id="information-heading">Order information</h2>
+                        </div>
+                        <dl class="detail-information-list">
+                            <div class="detail-information-item">
+                                <dt>Status</dt>
+                                <dd>{{ order.get_status_display }}</dd>
+                            </div>
+                            <div class="detail-information-item">
+                                <dt>Subject</dt>
+                                <dd>{{ order.subject }}</dd>
+                            </div>
+                            <div class="detail-information-item">
+                                <dt>Academic level</dt>
+                                <dd>{{ order.academic_level }}</dd>
+                            </div>
+                            <div class="detail-information-item">
+                                <dt>Budget</dt>
+                                <dd>{{ order.budget }}</dd>
+                            </div>
+                        </dl>
+                    </section>
+                </aside>
+            </div>
+
+            <footer class="detail-footer">
+                <a href="{% url 'writer_orders' %}">Back to My Orders</a>
+                <span>Assignment Helping Agency</span>
+            </footer>
+        </div>
+    </main>
+</body>
+</html>

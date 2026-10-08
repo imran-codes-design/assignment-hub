@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+
+# Environment/secrets
+.env
+.env.*
+!.env.example
+
+# Django/local database
+db.sqlite3
+db.sqlite3-journal
+db.sqlite3-wal
+db.sqlite3-shm
+
+# Private uploaded media
+media/
+
+# Generated static files
+staticfiles/
+
+# Test/coverage/cache
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE/editor
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create account | Assignment Helping Agency</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="{% static 'accounts/css/register.css' %}">
+</head>
+<body class="register-page">
+    <a class="register-skip-link" href="#register-form">Skip to registration form</a>
+    <header class="register-header">
+        <div class="container register-header-inner">
+            <a class="register-brand" href="{% url 'home' %}">
+                <span class="brand-icon" aria-hidden="true">A</span>
+                <span>Assignment <span class="brand-light">Helping Agency</span></span>
+            </a>
+            <a class="register-home-link" href="{% url 'home' %}">
+                <span aria-hidden="true">←</span> Homepage
+            </a>
+        </div>
+    </header>
+
+    <main class="register-main">
+        <div class="register-orbit register-orbit-one" aria-hidden="true"></div>
+        <div class="register-orbit register-orbit-two" aria-hidden="true"></div>
+        <div class="container register-container">
+            <div class="register-layout">
+                <section class="register-intro" aria-labelledby="register-intro-title">
+                    <p class="register-eyebrow"><span></span> A clear place to begin</p>
+                    <h1 id="register-intro-title">Start with your project brief.</h1>
+                    <p class="register-intro-copy">
+                        Create an account to organize your details and keep track of your request.
+                    </p>
+                    <div class="register-promise">
+                        <span class="register-promise-mark" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></svg>
+                        </span>
+                        <span>Your account gives you a place to return to your project information.</span>
+                    </div>
+                </section>
+
+                <section class="register-card" aria-labelledby="register-title">
+                    <div class="register-card-heading">
+                        <span class="register-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4.5 20a7.5 7.5 0 0 1 15 0M19 7v6M16 10h6"/></svg>
+                        </span>
+                        <p class="register-eyebrow">Get started</p>
+                        <h2 id="register-title">Create your account</h2>
+                        <p>Enter your details below to register.</p>
+                    </div>
+
+                    <form id="register-form" method="post" class="register-form">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                            <div class="register-alert" role="alert">
+                                {{ form.non_field_errors }}
+                            </div>
+                        {% endif %}
+                        {% for field in form %}
+                            <div class="register-field{% if field.errors %} has-errors{% endif %}">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <div class="register-field-help">{{ field.help_text }}</div>
+                                {% endif %}
+                                {% if field.errors %}
+                                    <div class="register-field-errors" id="{{ field.auto_id }}_errors" role="alert">
+                                        {{ field.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <button type="submit" class="register-submit">
+                            Create account <span aria-hidden="true">→</span>
+                        </button>
+                    </form>
+
+                    <p class="register-login">
+                        Already registered? <a href="{% url 'login' %}">Log in</a>
+                    </p>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer class="register-footer">
+        <div class="container">
+            <span>&copy; {% now "Y" %} Assignment Helping Agency</span>
+            <span>Academic support, starting with a clear brief.</span>
+        </div>
+    </footer>
+</body>
+</html>

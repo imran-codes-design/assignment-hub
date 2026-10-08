@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Log in | Assignment Helping Agency</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+</head>
+<body class="login-page">
+    <a class="login-skip-link" href="#login-form">Skip to login form</a>
+    <header class="login-header">
+        <div class="container login-header-inner">
+            <a class="login-brand" href="{% url 'home' %}">
+                <span class="brand-icon" aria-hidden="true">A</span>
+                <span>Assignment <span class="brand-light">Helping Agency</span></span>
+            </a>
+            <a class="login-home-link" href="{% url 'home' %}">
+                <span aria-hidden="true">←</span> Homepage
+            </a>
+        </div>
+    </header>
+
+    <main class="login-main" id="main-content">
+        <div class="login-orbit login-orbit-one" aria-hidden="true"></div>
+        <div class="login-orbit login-orbit-two" aria-hidden="true"></div>
+        <div class="container login-container">
+            <div class="login-layout">
+                <section class="login-intro" aria-labelledby="login-intro-title">
+                    <p class="login-eyebrow"><span></span> Your workspace awaits</p>
+                    <h1 id="login-intro-title">Pick up where your ideas left off.</h1>
+                    <p class="login-intro-copy">
+                        Sign in to revisit your account, follow your requests, and keep your project details close at hand.
+                    </p>
+                    <div class="login-promise">
+                        <span class="login-promise-mark" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="m5 12.5 4.2 4.2L19 7"/></svg>
+                        </span>
+                        <span>A clear place to return to your academic work.</span>
+                    </div>
+                </section>
+
+                <section class="login-card" aria-labelledby="login-title">
+                    <div class="login-card-heading">
+                        <span class="login-card-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.8 3.1-.2-.1a1.7 1.7 0 0 0-1.9.3l-.1.1h-3.6l-.1-.2a1.7 1.7 0 0 0-1.5-1 1.7 1.7 0 0 0-.9.3l-.2.1-3.1-1.8.1-.2a1.7 1.7 0 0 0-.3-1.9l-.1-.1v-3.6l.2-.1a1.7 1.7 0 0 0 1-1.5 1.7 1.7 0 0 0-.3-.9l-.1-.2 1.8-3.1.2.1a1.7 1.7 0 0 0 1.9-.3l.1-.1h3.6l.1.2a1.7 1.7 0 0 0 1.5 1 1.7 1.7 0 0 0 .9-.3l.2-.1 3.1 1.8-.1.2a1.7 1.7 0 0 0 .3 1.9l.1.1v3.6Z"/></svg>
+                        </span>
+                        <p class="login-eyebrow">Account access</p>
+                        <h2 id="login-title">Log in</h2>
+                        <p>Enter your details to securely access your account.</p>
+                    </div>
+
+                    {% if error %}
+                        <div class="login-alert" role="alert">
+                            <span class="login-alert-icon" aria-hidden="true">!</span>
+                            <span>{{ error }}</span>
+                        </div>
+                    {% endif %}
+
+                    <form id="login-form" method="post" class="login-form">
+                        {% csrf_token %}
+                        <div class="login-field">
+                            <label for="id_username">Username</label>
+                            <input
+                                type="text"
+                                name="username"
+                                id="id_username"
+                                class="form-control"
+                                autocomplete="username"
+                                required
+                                autofocus
+                            >
+                        </div>
+                        <div class="login-field">
+                            <label for="id_password">Password</label>
+                            <input
+                                type="password"
+                                name="password"
+                                id="id_password"
+                                class="form-control"
+                                autocomplete="current-password"
+                                required
+                            >
+                        </div>
+                        <button type="submit" class="login-submit">
+                            Log in <span aria-hidden="true">→</span>
+                        </button>
+                    </form>
+
+                    <p class="login-register">
+                        New to the agency? <a href="{% url 'register' %}">Create an account</a>
+                    </p>
+                </section>
+            </div>
+        </div>
+    </main>
+    <footer class="login-footer">
+        <div class="container">
+            <span>&copy; {% now "Y" %} Assignment Helping Agency</span>
+            <span>Academic support, starting with a clear brief.</span>
+        </div>
+    </footer>
+</body>
+</html>

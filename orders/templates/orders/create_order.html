@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Submit New Order | Assignment Helping Agency</title>
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+    >
+    <link rel="stylesheet" href="{% static 'orders/css/create-order.css' %}">
+</head>
+<body class="create-order-page">
+    <a class="order-skip-link" href="#order-form">Skip to order form</a>
+
+    <header class="order-header">
+        <div class="container order-header-inner">
+            <a class="order-brand" href="{% url 'home' %}">
+                <span class="order-brand-icon" aria-hidden="true">A</span>
+                <span>Assignment <span class="order-brand-light">Helping Agency</span></span>
+            </a>
+            <a class="order-header-link" href="{% url 'client_dashboard' %}">
+                <span aria-hidden="true">←</span> Back to Dashboard
+            </a>
+        </div>
+    </header>
+
+    <main class="order-main">
+        <div class="container order-container">
+            <div class="order-page-heading">
+                <p class="order-eyebrow"><span></span> Tell us about your project</p>
+                <h1>Submit New Order</h1>
+                <p>Share the key details of your assignment so your request has a clear starting point.</p>
+            </div>
+
+            <section class="order-form-card" aria-labelledby="order-form-title">
+                <div class="order-form-card-heading">
+                    <div>
+                        <p class="order-section-kicker">Project details</p>
+                        <h2 id="order-form-title">Your order brief</h2>
+                        <p>Complete the fields below to tell us about your assignment.</p>
+                    </div>
+                </div>
+
+                <form id="order-form" method="post" class="order-form">
+                    {% csrf_token %}
+                    {% if form.non_field_errors %}
+                        <div class="order-form-errors" role="alert">
+                            <strong>Please review your order details.</strong>
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <fieldset class="order-fieldset">
+                        <legend><span>01</span> Assignment overview</legend>
+                        <p class="order-fieldset-intro">Identify the assignment and its academic context.</p>
+                        <div class="order-field{% if form.title.errors %} has-errors{% endif %}">
+                            <label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>
+                            {{ form.title }}
+                            {% if form.title.errors %}
+                                <div class="order-field-errors" id="{{ form.title.auto_id }}_errors" role="alert">{{ form.title.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="order-field{% if form.subject.errors %} has-errors{% endif %}">
+                            <label for="{{ form.subject.id_for_label }}">{{ form.subject.label }}</label>
+                            {{ form.subject }}
+                            {% if form.subject.errors %}
+                                <div class="order-field-errors" id="{{ form.subject.auto_id }}_errors" role="alert">{{ form.subject.errors }}</div>
+                            {% endif %}
+                        </div>
+                        <div class="order-field{% if form.academic_level.errors %} has-errors{% endif %}">
+                            <label for="{{ form.academic_level.id_for_label }}">{{ form.academic_level.label }}</label>
+                            {{ form.academic_level }}
+                            {% if form.academic_level.errors %}
+                                <div class="order-field-errors" id="{{ form.academic_level.auto_id }}_errors" role="alert">{{ form.academic_level.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="order-fieldset">
+                        <legend><span>02</span> Requirements</legend>
+                        <p class="order-fieldset-intro">Describe the instructions and scope of your assignment.</p>
+                        <div class="order-field{% if form.description.errors %} has-errors{% endif %}">
+                            <label for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                            {{ form.description }}
+                            {% if form.description.errors %}
+                                <div class="order-field-errors" id="{{ form.description.auto_id }}_errors" role="alert">{{ form.description.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </fieldset>
+
+                    <fieldset class="order-fieldset order-fieldset-last">
+                        <legend><span>03</span> Schedule and budget</legend>
+                        <p class="order-fieldset-intro">Provide your requested deadline and budget.</p>
+                        <div class="order-field-grid">
+                            <div class="order-field{% if form.deadline.errors %} has-errors{% endif %}">
+                                <label for="{{ form.deadline.id_for_label }}">{{ form.deadline.label }}</label>
+                                {{ form.deadline }}
+                                {% if form.deadline.errors %}
+                                    <div class="order-field-errors" id="{{ form.deadline.auto_id }}_errors" role="alert">{{ form.deadline.errors }}</div>
+                                {% endif %}
+                            </div>
+                            <div class="order-field{% if form.budget.errors %} has-errors{% endif %}">
+                                <label for="{{ form.budget.id_for_label }}">{{ form.budget.label }}</label>
+                                {{ form.budget }}
+                                {% if form.budget.errors %}
+                                    <div class="order-field-errors" id="{{ form.budget.auto_id }}_errors" role="alert">{{ form.budget.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <div class="order-form-actions">
+                        <a class="order-cancel-link" href="{% url 'client_dashboard' %}">Cancel</a>
+                        <button type="submit" class="order-submit-button">
+                            Submit Order <span aria-hidden="true">→</span>
+                        </button>
+                    </div>
+                </form>
+            </section>
+
+            <p class="order-page-back">
+                <a href="{% url 'client_dashboard' %}"><span aria-hidden="true">←</span> Back to Dashboard</a>
+            </p>
+        </div>
+    </main>
+</body>
+</html>
